@@ -1,0 +1,45 @@
+package com.exemplo.livraria.controller;
+
+import com.exemplo.livraria.entity.Livro;
+import com.exemplo.livraria.service.LivroService;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/livros")
+public class LivroController {
+
+    private LivroService livroService;
+
+    public LivroController(LivroService livroService){
+        this.livroService = livroService;
+    }
+
+    @PostMapping
+    public Livro cadastrar(@RequestBody @Valid Livro livro){
+        return livroService.cadastrar(livro);
+    }
+
+    @GetMapping
+    public List<Livro> exibirTodos(){
+        return livroService.listarTodos();
+    }
+
+    @GetMapping("/{id}")
+    public Livro exibirPorId(@PathVariable Long id){
+        return livroService.buscarPorID(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarPorID(@PathVariable Long id){
+        livroService.deletarPorID(id);
+    }
+
+    @PutMapping("/{id}")
+    public void atualizarPorID(@RequestBody Livro livro, @PathVariable Long id){
+        livroService.atualizarLivro(livro, id);
+    }
+}
