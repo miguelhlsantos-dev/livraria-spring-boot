@@ -1,5 +1,6 @@
 package com.exemplo.livraria.controller;
 
+import com.exemplo.livraria.dto.LivroRequestDTO;
 import com.exemplo.livraria.entity.Livro;
 import com.exemplo.livraria.service.LivroService;
 import jakarta.validation.Valid;
@@ -18,9 +19,14 @@ public class LivroController {
         this.livroService = livroService;
     }
 
+//    @PostMapping
+//    public Livro cadastrar(@RequestBody @Valid Livro livro){
+//        return livroService.cadastrar(livro);
+//    }
+
     @PostMapping
-    public Livro cadastrar(@RequestBody @Valid Livro livro){
-        return livroService.cadastrar(livro);
+    public void cadastrarDTO(@RequestBody @Valid LivroRequestDTO livroDto){
+        livroService.cadastrarDTO(livroDto);
     }
 
     @GetMapping

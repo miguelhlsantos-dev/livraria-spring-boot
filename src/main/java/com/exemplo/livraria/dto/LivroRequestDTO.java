@@ -1,9 +1,16 @@
 package com.exemplo.livraria.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
 public class LivroRequestDTO {
 
+    @NotBlank
     private String titulo;
+
     private Long autorId;
+
+    @Min(1500)
     private int ano;
 
     public String getTitulo() {
