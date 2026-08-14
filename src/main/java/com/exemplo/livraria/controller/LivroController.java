@@ -1,6 +1,7 @@
 package com.exemplo.livraria.controller;
 
 import com.exemplo.livraria.dto.LivroRequestDTO;
+import com.exemplo.livraria.dto.LivroResponseDTO;
 import com.exemplo.livraria.entity.Livro;
 import com.exemplo.livraria.service.LivroService;
 import jakarta.validation.Valid;
@@ -30,12 +31,17 @@ public class LivroController {
     }
 
     @GetMapping
-    public List<Livro> exibirTodos(){
+    public List<LivroResponseDTO> exibirTodos(){
         return livroService.listarTodos();
     }
 
+//    @GetMapping("/{id}")
+//    public Livro exibirPorId(@PathVariable Long id){
+//        return livroService.buscarPorID(id);
+//    }
+
     @GetMapping("/{id}")
-    public Livro exibirPorId(@PathVariable Long id){
+    public LivroResponseDTO exibirPorID(@PathVariable Long id){
         return livroService.buscarPorID(id);
     }
 

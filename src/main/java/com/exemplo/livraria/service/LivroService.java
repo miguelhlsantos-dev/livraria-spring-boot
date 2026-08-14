@@ -1,6 +1,7 @@
 package com.exemplo.livraria.service;
 
 import com.exemplo.livraria.dto.LivroRequestDTO;
+import com.exemplo.livraria.dto.LivroResponseDTO;
 import com.exemplo.livraria.entity.Autor;
 import com.exemplo.livraria.entity.Livro;
 import com.exemplo.livraria.exception.AutorNaoEncontradoException;
@@ -22,6 +23,16 @@ public class LivroService {
         this.livroRepository = livroRepository;
         this.autorRepository = autorRepository;
     }
+
+    private LivroResponseDTO livroToLivroDTO(Livro livro){
+        LivroResponseDTO livroDTO = new LivroResponseDTO();
+        livroDTO.setTitulo(livro.getTitulo());
+        livroDTO.setId(livro.getId());
+        livroDTO.setAno(livro.getAno());
+        livroDTO.setAutor(livro.getAutor().getNome());
+        return livroDTO;
+    }
+
 //    metodo antigo usando a entidade livro
 //    public Livro cadastrar(Livro livro){
 //    return livroRepository.save(livro);
@@ -38,14 +49,25 @@ public class LivroService {
         livroRepository.save(livroConvertido);
     }
 
-    public List<Livro> listarTodos(){
-        return livroRepository.findAll();
+//    public List<Livro> listarTodos(){
+//        return livroRepository.findAll();
+//    }
+
+    public List<LivroResponseDTO> listarTodos(){
+        List<Livro> lista = livroRepository.findAll();
+        return lista.stream().map(this::livroToLivroDTO).toList();
     }
 
-    public Livro buscarPorID(Long id){
-        return livroRepository.findById(id).orElseThrow(
-                () -> new LivroNaoEncontradoException("Livro não encontrado")
-        );
+//    public Livro buscarPorID(Long id){
+//        return livroRepository.findById(id).orElseThrow(
+//                () -> new LivroNaoEncontradoException("Livro não encontrado")
+//        );
+//    }
+
+    public LivroResponseDTO buscarPorID(Long id){
+        Livro livroPreDTO = livroRepository.findById(id)
+                .orElseThrow( () -> new LivroNaoEncontradoException("Livro não encontrado"));
+        return livroToLivroDTO(livroPreDTO);
     }
 
     public void deletarPorID(Long id){
