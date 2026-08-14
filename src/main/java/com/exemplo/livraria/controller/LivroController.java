@@ -45,13 +45,14 @@ public class LivroController {
         return livroService.buscarPorID(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deletarPorID(@PathVariable Long id){
-        livroService.deletarPorID(id);
-    }
+//    @DeleteMapping("/{id}")
+//    public void deletarPorID(@PathVariable Long id){
+//        livroService.deletarPorID(id);
+//    }
+
 
     @PutMapping("/{id}")
-    public void atualizarPorID(@RequestBody Livro livro, @PathVariable Long id){
-        livroService.atualizarLivro(livro, id);
+    public void atualizarPorID(@RequestBody LivroRequestDTO livrodto, @PathVariable Long id){
+        livroService.atualizarDTO(livrodto, id);
     }
 }

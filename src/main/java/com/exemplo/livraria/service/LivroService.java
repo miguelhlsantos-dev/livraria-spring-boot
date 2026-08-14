@@ -85,4 +85,15 @@ public class LivroService {
 
     }
 
+    public void atualizarDTO(LivroRequestDTO livroDTO, Long id){
+        Livro livroParaAlterar = livroRepository.findById(id)
+                .orElseThrow( () -> new LivroNaoEncontradoException("Livro não encontrado"));
+        Autor autor = autorRepository.findById(livroParaAlterar.getAutor().getId())
+                .orElseThrow( () -> new AutorNaoEncontradoException("Autor não encontrado"));
+        livroParaAlterar.setTitulo(livroDTO.getTitulo());
+        livroParaAlterar.setAno(livroDTO.getAno());
+        livroParaAlterar.setAutor(autor);
+        livroRepository.save(livroParaAlterar);
+    }
+
 }
