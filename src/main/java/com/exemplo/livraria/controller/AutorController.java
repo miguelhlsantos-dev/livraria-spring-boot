@@ -1,5 +1,7 @@
 package com.exemplo.livraria.controller;
 
+import com.exemplo.livraria.dto.AutorRequestDTO;
+import com.exemplo.livraria.dto.AutorResponseDTO;
 import com.exemplo.livraria.entity.Autor;
 import com.exemplo.livraria.service.AutorService;
 import jakarta.validation.Valid;
@@ -19,18 +21,18 @@ public class AutorController {
     }
 
     @GetMapping
-    public List<Autor> listarTodos(){
+    public List<AutorResponseDTO> listarTodos(){
         return autorService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Optional<Autor> listarPorID(@PathVariable Long id){
+    public AutorResponseDTO listarPorID(@PathVariable Long id){
         return autorService.listarPorID(id);
     }
 
     @PostMapping
-    public Autor cadastrar(@RequestBody @Valid Autor autor){
-        return  autorService.cadastrar(autor);
+    public void cadastrar(@RequestBody @Valid AutorRequestDTO autorDTO){
+        autorService.cadastrar(autorDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -39,8 +41,8 @@ public class AutorController {
     }
 
     @PutMapping("/{id}")
-    public Autor atualizar(@RequestBody @Valid Autor autor, @PathVariable Long id){
-        return autorService.atualizarPorID(autor, id);
+    public void atualizar(@RequestBody @Valid AutorRequestDTO autorDTO, @PathVariable Long id){
+        autorService.atualizarPorID(autorDTO, id);
     }
 
 }

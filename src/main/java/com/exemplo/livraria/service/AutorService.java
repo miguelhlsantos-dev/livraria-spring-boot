@@ -1,6 +1,9 @@
 package com.exemplo.livraria.service;
 
+import com.exemplo.livraria.dto.AutorRequestDTO;
+import com.exemplo.livraria.dto.AutorResponseDTO;
 import com.exemplo.livraria.entity.Autor;
+import com.exemplo.livraria.exception.AutorNaoEncontradoException;
 import com.exemplo.livraria.repository.AutorRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +19,35 @@ public class AutorService {
         this.autorRepository = autorRepository;
     }
 
+    private AutorResponseDTO autorParaDTO(Autor autor){
+        AutorResponseDTO autorDTO = new AutorResponseDTO();
+        autorDTO.setNacionalidade(autor.getNacionalidade());
+        autorDTO.setNome(autor.getNome());
+        autorDTO.setId(autor.getId());
+        return autorDTO;
+    }
+
     // GET
-    public List<Autor> listarTodos(){
-        return autorRepository.findAll();
+    public List<AutorResponseDTO> listarTodos(){
+        List<Autor> lista = autorRepository.findAll();
+        return lista.stream()
+                .map(this::autorParaDTO)
+                .toList();
     }
 
     // GET /id
-    public Optional<Autor> listarPorID(Long id){
-        return autorRepository.findById(id);
+    public AutorResponseDTO listarPorID(Long id){
+        Autor autor = autorRepository.findById(id)
+                .orElseThrow( () -> new AutorNaoEncontradoException("Autor não encontrado"));
+        return autorParaDTO(autor);
     }
 
     // POST
-    public Autor cadastrar(Autor autor){
-        return autorRepository.save(autor);
+    public void cadastrar(AutorRequestDTO autorDTO){
+        Autor autor = new Autor();
+        autor.setNacionalidade(autorDTO.getNacionalidade());
+        autor.setNome(autorDTO.getNome());
+        autorRepository.save(autor);
     }
 
     // DELETE
@@ -37,11 +56,12 @@ public class AutorService {
     }
 
     // PUT
-    public Autor atualizarPorID(Autor autor, Long id){
-        Autor autorAtual = autorRepository.findById(id).orElseThrow();
-        autorAtual.setNome(autor.getNome());
-        autorAtual.setNacionalidade(autor.getNacionalidade());
-        return autorRepository.save(autorAtual);
+    public void atualizarPorID(AutorRequestDTO autorDTO, Long id){
+        Autor autor = autorRepository.findById(id)
+                .orElseThrow( () -> new AutorNaoEncontradoException("Autor não encontrado"));
+        autor.setNome(autorDTO.getNome());
+        autor.setNacionalidade(autorDTO.getNacionalidade());
+        autorRepository.save(autor);
     }
 
 
