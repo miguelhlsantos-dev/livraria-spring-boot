@@ -1,5 +1,7 @@
 package com.exemplo.livraria.controller;
 
+import com.exemplo.livraria.dto.ClienteRequestDTO;
+import com.exemplo.livraria.dto.ClienteResponseDTO;
 import com.exemplo.livraria.entity.Cliente;
 import com.exemplo.livraria.service.ClienteService;
 import jakarta.validation.Valid;
@@ -19,18 +21,18 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<Cliente> exibirTodos(){
+    public List<ClienteResponseDTO> exibirTodos(){
         return clienteService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Optional<Cliente> exibirPorID(@PathVariable Long id){
+    public ClienteResponseDTO exibirPorID(@PathVariable Long id){
         return clienteService.listarPorID(id);
     }
 
     @PostMapping
-    public void cadastrar(@RequestBody @Valid Cliente cliente){
-        clienteService.cadastrar(cliente);
+    public void cadastrar(@RequestBody @Valid ClienteRequestDTO clienteDTO){
+        clienteService.cadastrarDTO(clienteDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -39,9 +41,9 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public void atualizarPorID(@RequestBody Cliente cliente, @PathVariable Long id)
+    public void atualizarPorID(@RequestBody ClienteRequestDTO clienteDTO, @PathVariable Long id)
     {
-        clienteService.atualizar(cliente, id);
+        clienteService.atualizar(clienteDTO, id);
     }
 
 

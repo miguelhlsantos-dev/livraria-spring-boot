@@ -1,6 +1,9 @@
 package com.exemplo.livraria.service;
 
+import com.exemplo.livraria.dto.ClienteRequestDTO;
+import com.exemplo.livraria.dto.ClienteResponseDTO;
 import com.exemplo.livraria.entity.Cliente;
+import com.exemplo.livraria.exception.ClienteNaoEncontradoException;
 import com.exemplo.livraria.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +19,36 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-    public List<Cliente> listarTodos(){
-       return clienteRepository.findAll();
+    private ClienteResponseDTO transformarClienteDTO(Cliente cliente){
+        ClienteResponseDTO clientrDTO = new ClienteResponseDTO();
+        clientrDTO.setEmail(cliente.getEmail());
+        clientrDTO.setNome(cliente.getNome());
+        clientrDTO.setIdade(cliente.getIdade());
+        clientrDTO.setId(cliente.getId());
+        return clientrDTO;
     }
 
-    public Optional<Cliente> listarPorID(Long id){
-        return clienteRepository.findById(id);
+    public List<ClienteResponseDTO> listarTodos(){
+       List<Cliente> lista = clienteRepository.findAll();
+       return lista.stream().map(this::transformarClienteDTO).toList();
     }
 
-    // cadastro - POST
-    public void cadastrar(Cliente cliente){
+    public ClienteResponseDTO listarPorID(Long id){
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow( () -> new ClienteNaoEncontradoException("Cliente não encontrado"));
+        return transformarClienteDTO(cliente);
+    }
+
+//    cadastro - POST
+//    public void cadastrar(Cliente cliente){
+//        clienteRepository.save(cliente);
+//    }
+
+    public void cadastrarDTO(ClienteRequestDTO clienteDTO){
+        Cliente cliente = new Cliente();
+        cliente.setIdade(clienteDTO.getIdade());
+        cliente.setNome(clienteDTO.getNome());
+        cliente.setEmail(clienteDTO.getEmail());
         clienteRepository.save(cliente);
     }
 
@@ -35,12 +58,13 @@ public class ClienteService {
     }
 
     // atualizar - PUT
-    public Cliente atualizar(Cliente cliente, Long id){
-        Cliente clienteAtual = clienteRepository.findById(id).orElseThrow();
-        clienteAtual.setEmail(cliente.getEmail());
-        clienteAtual.setNome(cliente.getNome());
-        clienteAtual.setIdade(cliente.getIdade());
-        return clienteRepository.save(clienteAtual);
+    public void atualizar(ClienteRequestDTO clienteDTO, Long id){
+        Cliente cliente = clienteRepository.findById(id).
+                orElseThrow( () -> new ClienteNaoEncontradoException("Cliente não encontrado"));
+        cliente.setEmail(clienteDTO.getEmail());
+        cliente.setIdade(clienteDTO.getIdade());
+        cliente.setNome(clienteDTO.getNome());
+        clienteRepository.save(cliente);
     }
 
 }
