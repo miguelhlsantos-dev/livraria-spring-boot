@@ -5,6 +5,8 @@ import com.exemplo.livraria.dto.LivroResponseDTO;
 import com.exemplo.livraria.entity.Livro;
 import com.exemplo.livraria.service.LivroService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,39 +22,30 @@ public class LivroController {
         this.livroService = livroService;
     }
 
-//    @PostMapping
-//    public Livro cadastrar(@RequestBody @Valid Livro livro){
-//        return livroService.cadastrar(livro);
-//    }
-
     @PostMapping
-    public void cadastrarDTO(@RequestBody @Valid LivroRequestDTO livroDto){
-        livroService.cadastrarDTO(livroDto);
+    public ResponseEntity<LivroResponseDTO> cadastrarDTO(@RequestBody @Valid LivroRequestDTO livroDto){
+        return ResponseEntity.ok(livroService.cadastrarDTO(livroDto));
     }
 
     @GetMapping
-    public List<LivroResponseDTO> exibirTodos(){
-        return livroService.listarTodos();
+    public ResponseEntity<List<LivroResponseDTO>> exibirTodos(){
+        return ResponseEntity.ok(livroService.listarTodos());
     }
-
-//    @GetMapping("/{id}")
-//    public Livro exibirPorId(@PathVariable Long id){
-//        return livroService.buscarPorID(id);
-//    }
 
     @GetMapping("/{id}")
-    public LivroResponseDTO exibirPorID(@PathVariable Long id){
-        return livroService.buscarPorID(id);
+    public ResponseEntity<LivroResponseDTO> exibirPorID(@PathVariable Long id){
+        return ResponseEntity.ok(livroService.buscarPorID(id));
     }
 
-//    @DeleteMapping("/{id}")
-//    public void deletarPorID(@PathVariable Long id){
-//        livroService.deletarPorID(id);
-//    }
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPorID(@PathVariable Long id){
+        livroService.deletarPorID(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @PutMapping("/{id}")
-    public void atualizarPorID(@RequestBody LivroRequestDTO livrodto, @PathVariable Long id){
-        livroService.atualizarDTO(livrodto, id);
+    public ResponseEntity<LivroResponseDTO> atualizarPorID(@RequestBody @Valid LivroRequestDTO livrodto, @PathVariable Long id){
+        LivroResponseDTO livroAtualizado = livroService.atualizarDTO(livrodto, id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(livroAtualizado);
     }
 }

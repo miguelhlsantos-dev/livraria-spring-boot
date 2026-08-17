@@ -43,11 +43,12 @@ public class AutorService {
     }
 
     // POST
-    public void cadastrar(AutorRequestDTO autorDTO){
+    public AutorResponseDTO cadastrar(AutorRequestDTO autorDTO){
         Autor autor = new Autor();
         autor.setNacionalidade(autorDTO.getNacionalidade());
         autor.setNome(autorDTO.getNome());
         autorRepository.save(autor);
+        return autorParaDTO(autor);
     }
 
     // DELETE
@@ -56,12 +57,13 @@ public class AutorService {
     }
 
     // PUT
-    public void atualizarPorID(AutorRequestDTO autorDTO, Long id){
+    public AutorResponseDTO atualizarPorID(AutorRequestDTO autorDTO, Long id){
         Autor autor = autorRepository.findById(id)
                 .orElseThrow( () -> new AutorNaoEncontradoException("Autor não encontrado"));
         autor.setNome(autorDTO.getNome());
         autor.setNacionalidade(autorDTO.getNacionalidade());
         autorRepository.save(autor);
+        return autorParaDTO(autor);
     }
 
 

@@ -5,6 +5,8 @@ import com.exemplo.livraria.dto.AutorResponseDTO;
 import com.exemplo.livraria.entity.Autor;
 import com.exemplo.livraria.service.AutorService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,28 +23,29 @@ public class AutorController {
     }
 
     @GetMapping
-    public List<AutorResponseDTO> listarTodos(){
-        return autorService.listarTodos();
+    public ResponseEntity<List<AutorResponseDTO>> listarTodos(){
+        return ResponseEntity.ok().body(autorService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public AutorResponseDTO listarPorID(@PathVariable Long id){
-        return autorService.listarPorID(id);
+    public ResponseEntity<AutorResponseDTO> listarPorID(@PathVariable Long id){
+        return ResponseEntity.ok(autorService.listarPorID(id));
     }
 
     @PostMapping
-    public void cadastrar(@RequestBody @Valid AutorRequestDTO autorDTO){
-        autorService.cadastrar(autorDTO);
+    public ResponseEntity<AutorResponseDTO> cadastrar(@RequestBody @Valid AutorRequestDTO autorDTO){
+        AutorResponseDTO autorCadastrado = autorService.cadastrar(autorDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(autorCadastrado);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarPorId(@PathVariable Long id){
+    public ResponseEntity<Void> deletarPorId(@PathVariable Long id){
         autorService.deletarPorID(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public void atualizar(@RequestBody @Valid AutorRequestDTO autorDTO, @PathVariable Long id){
-        autorService.atualizarPorID(autorDTO, id);
+    public ResponseEntity<AutorResponseDTO> atualizar(@RequestBody @Valid AutorRequestDTO autorDTO, @PathVariable Long id){
+        return ResponseEntity.ok().body(autorService.atualizarPorID(autorDTO, id));
     }
-
 }

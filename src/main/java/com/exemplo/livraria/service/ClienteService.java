@@ -20,12 +20,12 @@ public class ClienteService {
     }
 
     private ClienteResponseDTO transformarClienteDTO(Cliente cliente){
-        ClienteResponseDTO clientrDTO = new ClienteResponseDTO();
-        clientrDTO.setEmail(cliente.getEmail());
-        clientrDTO.setNome(cliente.getNome());
-        clientrDTO.setIdade(cliente.getIdade());
-        clientrDTO.setId(cliente.getId());
-        return clientrDTO;
+        ClienteResponseDTO clienteDTO = new ClienteResponseDTO();
+        clienteDTO.setEmail(cliente.getEmail());
+        clienteDTO.setNome(cliente.getNome());
+        clienteDTO.setIdade(cliente.getIdade());
+        clienteDTO.setId(cliente.getId());
+        return clienteDTO;
     }
 
     public List<ClienteResponseDTO> listarTodos(){
@@ -39,17 +39,13 @@ public class ClienteService {
         return transformarClienteDTO(cliente);
     }
 
-//    cadastro - POST
-//    public void cadastrar(Cliente cliente){
-//        clienteRepository.save(cliente);
-//    }
-
-    public void cadastrarDTO(ClienteRequestDTO clienteDTO){
+    public ClienteResponseDTO cadastrarDTO(ClienteRequestDTO clienteDTO){
         Cliente cliente = new Cliente();
         cliente.setIdade(clienteDTO.getIdade());
         cliente.setNome(clienteDTO.getNome());
         cliente.setEmail(clienteDTO.getEmail());
         clienteRepository.save(cliente);
+        return transformarClienteDTO(cliente);
     }
 
     // deletar - DELETE
@@ -58,13 +54,14 @@ public class ClienteService {
     }
 
     // atualizar - PUT
-    public void atualizar(ClienteRequestDTO clienteDTO, Long id){
+    public ClienteResponseDTO atualizar(ClienteRequestDTO clienteDTO, Long id){
         Cliente cliente = clienteRepository.findById(id).
                 orElseThrow( () -> new ClienteNaoEncontradoException("Cliente não encontrado"));
         cliente.setEmail(clienteDTO.getEmail());
         cliente.setIdade(clienteDTO.getIdade());
         cliente.setNome(clienteDTO.getNome());
         clienteRepository.save(cliente);
+        return transformarClienteDTO(cliente);
     }
 
 }

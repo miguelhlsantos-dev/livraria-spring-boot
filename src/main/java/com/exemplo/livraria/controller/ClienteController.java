@@ -2,13 +2,13 @@ package com.exemplo.livraria.controller;
 
 import com.exemplo.livraria.dto.ClienteRequestDTO;
 import com.exemplo.livraria.dto.ClienteResponseDTO;
-import com.exemplo.livraria.entity.Cliente;
 import com.exemplo.livraria.service.ClienteService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/clientes")
@@ -21,29 +21,30 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<ClienteResponseDTO> exibirTodos(){
-        return clienteService.listarTodos();
+    public ResponseEntity<List<ClienteResponseDTO>> exibirTodos(){
+        return ResponseEntity.ok(clienteService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ClienteResponseDTO exibirPorID(@PathVariable Long id){
-        return clienteService.listarPorID(id);
+    public ResponseEntity<ClienteResponseDTO> exibirPorID(@PathVariable Long id){
+        return ResponseEntity.ok(clienteService.listarPorID(id));
     }
 
     @PostMapping
-    public void cadastrar(@RequestBody @Valid ClienteRequestDTO clienteDTO){
-        clienteService.cadastrarDTO(clienteDTO);
+    public ResponseEntity<ClienteResponseDTO> cadastrar(@RequestBody @Valid ClienteRequestDTO clienteDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.cadastrarDTO(clienteDTO));
     }
 
     @DeleteMapping("/{id}")
-    public void deletarPorID(@PathVariable Long id){
+    public ResponseEntity<Void> deletarPorID(@PathVariable Long id){
         clienteService.deletarPorID(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public void atualizarPorID(@RequestBody ClienteRequestDTO clienteDTO, @PathVariable Long id)
+    public ResponseEntity<ClienteResponseDTO> atualizarPorID(@RequestBody @Valid ClienteRequestDTO clienteDTO, @PathVariable Long id)
     {
-        clienteService.atualizar(clienteDTO, id);
+        return ResponseEntity.ok(clienteService.atualizar(clienteDTO, id));
     }
 
 

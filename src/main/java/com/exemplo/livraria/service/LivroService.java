@@ -33,12 +33,7 @@ public class LivroService {
         return livroDTO;
     }
 
-//    metodo antigo usando a entidade livro
-//    public Livro cadastrar(Livro livro){
-//    return livroRepository.save(livro);
-//    }
-
-    public void cadastrarDTO(LivroRequestDTO livroDTO){
+    public LivroResponseDTO cadastrarDTO(LivroRequestDTO livroDTO){
         Long idAutorDTo = livroDTO.getAutorId();
         Autor autorLivroDTO = autorRepository.findById(idAutorDTo)
                 .orElseThrow(() -> new AutorNaoEncontradoException("Autor não encontrado"));
@@ -47,22 +42,14 @@ public class LivroService {
         livroConvertido.setAutor(autorLivroDTO);
         livroConvertido.setTitulo(livroDTO.getTitulo());
         livroRepository.save(livroConvertido);
+        return livroToLivroDTO(livroConvertido);
     }
 
-//    public List<Livro> listarTodos(){
-//        return livroRepository.findAll();
-//    }
 
     public List<LivroResponseDTO> listarTodos(){
         List<Livro> lista = livroRepository.findAll();
         return lista.stream().map(this::livroToLivroDTO).toList();
     }
-
-//    public Livro buscarPorID(Long id){
-//        return livroRepository.findById(id).orElseThrow(
-//                () -> new LivroNaoEncontradoException("Livro não encontrado")
-//        );
-//    }
 
     public LivroResponseDTO buscarPorID(Long id){
         Livro livroPreDTO = livroRepository.findById(id)
@@ -74,18 +61,7 @@ public class LivroService {
         livroRepository.deleteById(id);
     }
 
-    public void atualizarLivro(Livro livro, Long id)
-    {
-           Livro livroParaAlterar = livroRepository.findById(id).orElseThrow(
-                   () -> new LivroNaoEncontradoException("Livro não encontrado"));
-            livroParaAlterar.setAno(livro.getAno());
-            livroParaAlterar.setAutor(livro.getAutor());
-            livroParaAlterar.setTitulo(livro.getTitulo());
-            livroRepository.save(livroParaAlterar);
-
-    }
-
-    public void atualizarDTO(LivroRequestDTO livroDTO, Long id){
+    public LivroResponseDTO atualizarDTO(LivroRequestDTO livroDTO, Long id){
         Livro livroParaAlterar = livroRepository.findById(id)
                 .orElseThrow( () -> new LivroNaoEncontradoException("Livro não encontrado"));
         Autor autor = autorRepository.findById(livroParaAlterar.getAutor().getId())
@@ -94,6 +70,7 @@ public class LivroService {
         livroParaAlterar.setAno(livroDTO.getAno());
         livroParaAlterar.setAutor(autor);
         livroRepository.save(livroParaAlterar);
+        return livroToLivroDTO(livroParaAlterar);
     }
 
 }
