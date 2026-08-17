@@ -5,12 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 
 public class LivroRequestDTO {
 
-    @NotBlank
+    @NotBlank(message = "É obrigatório informar o título.")
     private String titulo;
 
     private Long autorId;
 
-    @Min(1500)
+    @Min(value = 1500, message = "É obrigatório informar a nacionalidade.")
     private int ano;
 
     public String getTitulo() {

@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public class AutorRequestDTO {
 
-    @NotBlank
+    @NotBlank(message = "É obrigatório informar o nome.")
     private String nome;
 
-    @NotBlank
+    @NotBlank(message = "É obrigatório informar a nacionalidade.")
     private String nacionalidade;
 
     public String getNome() {

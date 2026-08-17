@@ -6,13 +6,13 @@ import jakarta.validation.constraints.Positive;
 
 public class ClienteRequestDTO {
 
-    @NotBlank
+    @NotBlank(message = "É obrigatório informar o nome.")
     private String nome;
 
-    @Email
+    @Email(message = "É obrigatório informar um endereço de e-mail válido.")
     private String email;
 
-    @Positive
+    @Positive(message = "É obrigatório informar um valor maior que 0 para a idade.")
     private int idade;
 
     public String getNome() {
