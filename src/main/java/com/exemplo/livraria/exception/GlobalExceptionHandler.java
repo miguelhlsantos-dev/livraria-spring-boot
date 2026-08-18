@@ -68,5 +68,13 @@ public class GlobalExceptionHandler {
                 .body(erro);
     }
 
+    @ExceptionHandler(EditoraNaoEncontradaException.class)
+    public ResponseEntity<ErrorResponseDTO> tratarEditoraNaoEncontrada(EditoraNaoEncontradaException exception){
+        ErrorResponseDTO erro = new ErrorResponseDTO();
+        erro.setTimestamp(LocalDateTime.now());
+        erro.setMensagem(exception.getMessage());
+        erro.setStatus(HttpStatus.NOT_FOUND.value());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
 
 }
