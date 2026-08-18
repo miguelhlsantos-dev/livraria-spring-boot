@@ -12,7 +12,7 @@ public class ClienteRequestDTO {
     @Email(message = "É obrigatório informar um endereço de e-mail válido.")
     private String email;
 
-    @Positive(message = "É obrigatório informar um valor maior que 0 para a idade.")
+    @Positive(message = "É obrigatório informar um valor maior que 0 para a idade")
     private int idade;
 
     public String getNome() {
