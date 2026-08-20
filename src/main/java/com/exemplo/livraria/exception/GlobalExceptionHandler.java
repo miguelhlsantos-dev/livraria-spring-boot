@@ -77,4 +77,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
 
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<ErrorResponseDTO> tratarRegraDeNegocio(NegocioException exception){
+        ErrorResponseDTO erro = new ErrorResponseDTO();
+        erro.setTimestamp(LocalDateTime.now());
+        erro.setMensagem(exception.getMessage());
+        erro.setStatus(HttpStatus.CONFLICT.value());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
 }

@@ -13,6 +13,16 @@ public class LivroRequestDTO {
     @Min(value = 1500, message = "É obrigatório informar a nacionalidade.")
     private int ano;
 
+    private Long editoraId;
+
+    public Long getEditoraId() {
+        return editoraId;
+    }
+
+    public void setEditoraId(Long editoraId) {
+        this.editoraId = editoraId;
+    }
+
     public String getTitulo() {
         return titulo;
     }

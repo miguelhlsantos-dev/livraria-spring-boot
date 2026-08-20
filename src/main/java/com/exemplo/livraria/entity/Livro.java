@@ -21,6 +21,10 @@ public class Livro {
     @Min(1500)
     private int ano;
 
+    @JoinColumn(name = "editora_id")
+    @ManyToOne
+    private Editora editora;
+
     public int getAno() {
         return ano;
     }
@@ -51,5 +55,13 @@ public class Livro {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Editora getEditora() {
+        return editora;
+    }
+
+    public void setEditora(Editora editora) {
+        this.editora = editora;
     }
 }

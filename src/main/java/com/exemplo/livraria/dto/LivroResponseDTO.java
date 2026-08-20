@@ -6,6 +6,15 @@ public class LivroResponseDTO {
     private String autor;
     private int ano;
     private String titulo;
+    private String editora;
+
+    public String getEditora() {
+        return editora;
+    }
+
+    public void setEditora(String editora) {
+        this.editora = editora;
+    }
 
     public Long getId() {
         return id;
